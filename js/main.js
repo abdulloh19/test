@@ -173,3 +173,76 @@ if (productTitle && productImg && productPrice && productData && productWidth &&
     elEditModal.hide();
 }
 });
+
+// for sortBy
+
+const elProductFilterForm = document.querySelector("#product-filter");
+const elProductFilterSearch = document.querySelector("#search");
+const elProductFIlterFrom = document.querySelector("#from");
+const elProductFilterTo = document.querySelector("#to");
+const elProductFilterWith = document.querySelector("#from_width");
+const elProductFilterTowidth = document.querySelector("#to_width");
+const elProductFilterHeight = document.querySelector("#from_height");
+const elProductFilterToheight = document.querySelector("#to_height");
+const elProductFilterSortby = document.querySelector("#sortby");
+
+elProductFilterForm.addEventListener("submit", function(evt) {
+    evt.preventDefault();
+    const filterSearchValue = elProductFilterSearch.value;
+    const filterFromValue = elProductFIlterFrom.value;
+    const filterToValue = elProductFilterTo.value;
+    const filterFromWithValue = elProductFilterWith.value;
+    const filterToWithValue = elProductFilterTowidth.value;
+    const filterFromHeightValue = elProductFilterHeight.value;
+    const filterToHeightValue = elProductFilterToheight.value;
+    const filterSortBy = elProductFilterSortby.value; 
+
+    let productFilter = products.filter(function(product) {
+        return product.title.toLowerCase().includes(filterSearchValue.toLowerCase())
+    }).filter(function(product) {
+            return product.price >= filterFromValue;
+    }).filter(function(product) {
+        if (filterToValue) {
+            return product.price <= filterToValue;
+        }
+        return true
+    }).filter(function(product) {
+        return product.sizes.width >= filterFromWithValue;
+    }).filter(function(product) {
+        if(filterToWithValue) {
+            return product.sizes.width <= filterToWithValue;
+        }
+        return true
+    }).filter(function(product) {
+        return product.sizes.height >= filterFromHeightValue;
+    }).filter(function(product) {
+        if (filterToHeightValue) {
+            return product.sizes.height <= filterToHeightValue;
+        }
+        return true
+    }).sort(function(a, b) {
+        switch (filterSortBy) {
+            case "1":
+                if (a.title > b.title) {
+                    return 1
+                } else if (a.title < b.title) {
+                    return-1
+                }
+                return 0;
+                case "2":
+                  return  a.price - b.price;
+                case "3":
+                 return   b.price - a.price;
+                case "4":
+                 return   a.sizes.width - b.sizes.width;
+                case "5":
+                 return   b.sizes.width - a.sizes.width;
+            default:
+                return true
+        }
+    })
+    console.log(filterSortBy);
+
+    productWrapper.innerHTML = "";
+    productRender(productFilter)
+})
