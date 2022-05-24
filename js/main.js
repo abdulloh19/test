@@ -34,13 +34,12 @@ const createProduct = function(product) {
     //     elProductItem.append(elProductLi)
     // }
     const elProductFavoriteBtn = elProductRow.querySelector(".btn-success");
+    elProductFavoriteBtn.textContent = isFavorite;
     elProductFavoriteBtn.dataset.id = id;
     const elProductEditBtn = elProductRow.querySelector(".btn-secondary");
     elProductEditBtn.dataset.id = id;
     const elProductDeleteBtn = elProductRow.querySelector(".btn-danger");
     elProductDeleteBtn.dataset.id = id;
-    const elProductFavorites = elProductRow.querySelector(".btn-success");
-    elProductFavorites.textContent = isFavorite;
 
     return elProductRow;
 };
@@ -55,6 +54,9 @@ const productRender = function(productArray = products) {
             productWrapper.append(elProduct);
     });
 };
+
+//for add product
+
     const elPorductForm = document.querySelector("#add-form")
     const elProductAddTitle = document.querySelector("#add-parrot-title");
     const elProductAddImg = document.querySelector("#add-parrot-img");
@@ -63,6 +65,7 @@ const productRender = function(productArray = products) {
     const elPorductAddWidth = document.querySelector("#add-parrot_width");
     const elProductAddHeight = document.querySelector("#add-parrot_height");
     const elProductAddFeatures = document.querySelector("#add-features");
+    const elProductFavorite = document.querySelector(".btn-success")
     const elAddModal = new bootstrap.Modal(document.querySelector("#add-parrot-modal"));
 
 productRender();
@@ -77,6 +80,7 @@ const dataValue = elProductAddData.value;
 const widthValue = elPorductAddWidth.value;
 const heightValue =  elProductAddHeight.value;
 const featuresValue = elProductAddFeatures.value;
+// 
 
 if (titleValue && imgValue && priceValue && dataValue && widthValue && heightValue && featuresValue) {
     const addProduct = {
@@ -90,16 +94,17 @@ if (titleValue && imgValue && priceValue && dataValue && widthValue && heightVal
         },
         features: featuresValue.split(",")
     };
-    console.log(addProduct);
-
-    products.unshift(addProduct);
-    const productW = createProduct(addProduct);
-    productWrapper.append(productW);
+    products.push(addProduct);
+    const productConst = createProduct(addProduct);
+    productWrapper.append(productConst)
     elAddModal.hide();
     elPorductForm.reset();
+    productRender();
 }
 
 });
+
+// for edit product
 
 const elProductEditTitle = document.querySelector("#edit-parrot-title");
 const elProductEditImg = document.querySelector("#edit-parrot-img");
@@ -169,6 +174,7 @@ if (productTitle && productImg && productPrice && productData && productWidth &&
 
     products.splice(productIndex, 1, elProductEditing);
     productWrapper.innerHTML = "";
+
     productRender();
     elEditModal.hide();
 }
