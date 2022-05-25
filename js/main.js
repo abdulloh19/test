@@ -82,24 +82,23 @@ const heightValue =  elProductAddHeight.value;
 const featuresValue = elProductAddFeatures.value;
 // 
 
-if (titleValue && imgValue && priceValue && dataValue && widthValue && heightValue && featuresValue) {
+if (titleValue.trim() && imgValue && priceValue.trim() && dataValue && widthValue.trim() && heightValue.trim() && featuresValue) {
     const addProduct = {
         id: Math.floor(Math.random() * 1000),
         title: titleValue,
         img: "https://media.istockphoto.com/photos/parrot-hyacinth-macaw-picture-id1359443019?b=1&k=20&m=1359443019&s=170667a&w=0&h=dteRZ9bM7sEvBbFE9it1r9O7IxlILXb1UnSoLNEVMAg=",
-        price: priceValue,
+        price: +priceValue,
         sizes: {
             width: widthValue,
             height: heightValue,
         },
         features: featuresValue.split(",")
     };
-    products.push(addProduct);
+    products.unshift(addProduct);
     const productConst = createProduct(addProduct);
-    productWrapper.append(productConst)
+    productWrapper.prepend(productConst);
     elAddModal.hide();
     elPorductForm.reset();
-    productRender();
 }
 
 });
@@ -137,9 +136,10 @@ productWrapper.addEventListener("click", function(evt) {
         elProductEditImg.value = clickedBtnElement.img;
         elProductEditPrice.value = clickedBtnElement.price;
         elProductEditData.value = clickedBtnElement.birthDate;
-        elPorductEditWidth.value = clickedBtnElement.width;
-        elProductEditHeight.value = clickedBtnElement.height;
-
+        elPorductEditWidth.value = clickedBtnElement.sizes.width;
+        elProductEditHeight.value = clickedBtnElement.sizes.height;
+        elProductEditFeatures.value = clickedBtnElement.features;
+        
         elProductEditForm.dataset.id = clickedBtnId;
     }
 });
@@ -166,7 +166,7 @@ if (productTitle && productImg && productPrice && productData && productWidth &&
         width: elPorductEditWidth.value,
         height: elProductEditHeight.value,
         },
-        features: elProductEditFeatures.value.split(",")
+        features: elProductEditFeatures.value
     };
     const productIndex = products.findIndex(function(product) {
         return elProductEditing.id === product.id;
@@ -252,3 +252,4 @@ elProductFilterForm.addEventListener("submit", function(evt) {
     productWrapper.innerHTML = "";
     productRender(productFilter)
 })
+
